@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VKİ Hesaplama — Dijital Tabağım</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .vki-result-box { background:var(--white); border-radius:var(--radius); padding:36px; box-shadow:var(--card-shadow); text-align:center; border:2px solid var(--border); transition:.3s; }
+    .vki-val { font-size:4rem; font-weight:800; color:var(--primary); line-height:1; }
+    .vki-label { font-size:1.4rem; font-weight:700; margin:8px 0; }
+    .vki-sub { font-size:.9rem; color:var(--text-muted); }
+    .vki-result-box.underweight { border-color:#FFC107; }
+    .vki-result-box.normal      { border-color:#68BE6D; }
+    .vki-result-box.overweight  { border-color:#FF9800; }
+    .vki-result-box.obese       { border-color:#f44336; }
+    .history-table { width:100%; border-collapse:collapse; }
+    .history-table th, .history-table td { padding:14px 16px; text-align:left; border-bottom:1px solid var(--border); font-size:.9rem; }
+    .history-table th { font-weight:700; color:var(--text-muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.5px; background:var(--bg); }
+    .badge-normal { background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:12px; font-size:.8rem; font-weight:600; }
+    .badge-under  { background:#fff8e1; color:#f57f17; padding:3px 10px; border-radius:12px; font-size:.8rem; font-weight:600; }
+    .badge-over   { background:#fff3e0; color:#e65100; padding:3px 10px; border-radius:12px; font-size:.8rem; font-weight:600; }
+    .badge-obese  { background:#ffebee; color:#b71c1c; padding:3px 10px; border-radius:12px; font-size:.8rem; font-weight:600; }
+  </style>
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <a href="giris.html" class="btn-login" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1 data-tr="⚖️ VKİ Hesaplama" data-en="⚖️ BMI Calculator">⚖️ VKİ Hesaplama</h1>
+      <p data-tr="Vücut Kitle İndeksinizi hesaplayın, sağlık durumunuzu öğrenin" data-en="Calculate your Body Mass Index and learn your health status">Vücut Kitle İndeksinizi hesaplayın, sağlık durumunuzu öğrenin</p>
+    </div>
+  </div>
+
+  <section style="padding:56px 0;background:var(--bg)">
+    <div class="container">
+      <div class="bmi-page-grid">
+        <!-- FORM -->
+        <div>
+          <div class="form-card">
+            <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:24px" data-tr="Bilgilerinizi Girin" data-en="Enter Your Info">Bilgilerinizi Girin</h2>
+            <div class="form-group">
+              <label data-tr="Boy (cm)" data-en="Height (cm)">Boy (cm)</label>
+              <input type="number" id="boy" placeholder="170" min="100" max="250" />
+            </div>
+            <div class="form-group">
+              <label data-tr="Kilo (kg)" data-en="Weight (kg)">Kilo (kg)</label>
+              <input type="number" id="kilo" placeholder="70" min="30" max="300" />
+            </div>
+            <button class="btn-primary form-submit" id="calcBtn" onclick="calculate()" data-tr="Hesapla" data-en="Calculate">Hesapla</button>
+            <div id="resultBox" style="margin-top:24px;display:none">
+              <div class="vki-result-box" id="vkiCard">
+                <div class="vki-val" id="vkiVal">—</div>
+                <div class="vki-label" id="vkiLabel">—</div>
+                <div class="vki-sub" id="vkiSub"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- TABLE -->
+        <div>
+          <div class="form-card">
+            <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px" data-tr="VKİ Referans Tablosu" data-en="BMI Reference Table">VKİ Referans Tablosu</h2>
+            <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:20px" data-tr="Dünya Sağlık Örgütü standartlarına göre" data-en="According to WHO standards">Dünya Sağlık Örgütü standartlarına göre</p>
+            <table class="bmi-info-table">
+              <thead><tr><th data-tr="VKİ Değeri" data-en="BMI Value">VKİ Değeri</th><th data-tr="Durum" data-en="Status">Durum</th></tr></thead>
+              <tbody>
+                <tr><td>&lt; 18.5</td><td><span class="badge-under" data-tr="Zayıf 🟡" data-en="Underweight 🟡">Zayıf 🟡</span></td></tr>
+                <tr><td>18.5 – 24.9</td><td><span class="badge-normal" data-tr="Normal 🟢" data-en="Normal 🟢">Normal 🟢</span></td></tr>
+                <tr><td>25 – 29.9</td><td><span class="badge-over" data-tr="Fazla Kilolu 🟠" data-en="Overweight 🟠">Fazla Kilolu 🟠</span></td></tr>
+                <tr><td>≥ 30</td><td><span class="badge-obese" data-tr="Obez 🔴" data-en="Obese 🔴">Obez 🔴</span></td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:28px">
+              <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px" data-tr="Son Kayıtlar" data-en="Recent Records">Son Kayıtlar</h3>
+              <div id="historyBox"><p style="font-size:.85rem;color:var(--text-muted)" data-tr="Yükleniyor..." data-en="Loading...">Yükleniyor...</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    async function calculate() {
+      const boy = +document.getElementById('boy').value;
+      const kilo = +document.getElementById('kilo').value;
+      if (!boy || !kilo || boy<=0) { showToast('Lütfen geçerli değerler girin.', 'error'); return; }
+
+      const vki = kilo / ((boy/100)**2);
+      const lang = currentLang;
+
+      let label, emoji, cls, sub;
+      if (vki<18.5)      { label=lang==='en'?'Underweight':'Zayıf';       emoji='🟡'; cls='underweight'; sub=lang==='en'?'You may need to gain weight.':'Kilo almanız gerekebilir.'; }
+      else if (vki<25)   { label=lang==='en'?'Normal':'Normal';           emoji='🟢'; cls='normal';      sub=lang==='en'?'You have a healthy weight!':'Sağlıklı kilodayorsunuz!'; }
+      else if (vki<30)   { label=lang==='en'?'Overweight':'Fazla Kilolu'; emoji='🟠'; cls='overweight';  sub=lang==='en'?'Consider a balanced diet.':'Dengeli beslenmeyi düşünün.'; }
+      else               { label=lang==='en'?'Obese':'Obez';              emoji='🔴'; cls='obese';       sub=lang==='en'?'Please consult a specialist.':'Bir uzmanla görüşmenizi öneririz.'; }
+
+      document.getElementById('vkiVal').textContent = vki.toFixed(2);
+      document.getElementById('vkiLabel').textContent = emoji + ' ' + label;
+      document.getElementById('vkiSub').textContent = sub;
+      const card = document.getElementById('vkiCard');
+      card.className = 'vki-result-box ' + cls;
+      document.getElementById('resultBox').style.display = 'block';
+
+      // Save to Supabase
+      try {
+        await supabaseClient.from('vki_kayitlari').insert({
+          boy, kilo,
+          vki: parseFloat(vki.toFixed(2)),
+          durum: label
+        });
+        loadHistory();
+      } catch(_) {}
+    }
+
+    async function loadHistory() {
+      const box = document.getElementById('historyBox');
+      try {
+        const { data, error } = await supabaseClient.from('vki_kayitlari').select('*').order('created_at',{ascending:false}).limit(5);
+        if (error || !data?.length) { box.innerHTML='<p style="font-size:.85rem;color:var(--text-muted)" data-tr="Henüz kayıt yok." data-en="No records yet.">Henüz kayıt yok.</p>'; return; }
+        const rows = data.map(r=>{
+          const d = new Date(r.created_at).toLocaleDateString('tr-TR');
+          let bc = 'badge-normal';
+          if(r.durum?.includes('Zayıf')||r.durum==='Underweight') bc='badge-under';
+          else if(r.durum?.includes('Fazla')||r.durum==='Overweight') bc='badge-over';
+          else if(r.durum==='Obez'||r.durum==='Obese') bc='badge-obese';
+          return `<tr><td>${r.boy} cm / ${r.kilo} kg</td><td>${r.vki}</td><td><span class="${bc}">${r.durum}</span></td><td style="color:var(--text-muted);font-size:.8rem">${d}</td></tr>`;
+        }).join('');
+        box.innerHTML=`<table class="history-table"><thead><tr><th>Boy/Kilo</th><th>VKİ</th><th>Durum</th><th>Tarih</th></tr></thead><tbody>${rows}</tbody></table>`;
+      } catch { box.innerHTML=''; }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadHistory);
+    document.addEventListener('keydown', e => { if(e.key==='Enter') calculate(); });
+  </script>
+</body>
+</html>

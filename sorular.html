@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soru Sor — Dijital Tabağım</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <a href="giris.html" class="btn-login" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1 data-tr="💬 Soru Sor" data-en="💬 Ask a Question">💬 Soru Sor</h1>
+      <p data-tr="Beslenme ve sağlıklı yaşam hakkında merak ettiklerinizi sorun" data-en="Ask anything about nutrition and healthy living">Beslenme ve sağlıklı yaşam hakkında merak ettiklerinizi sorun</p>
+    </div>
+  </div>
+
+  <section style="padding:56px 0;background:var(--bg)">
+    <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start">
+
+      <!-- FORM -->
+      <div>
+        <div class="form-card">
+          <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:8px" data-tr="Sorunuzu Gönderin" data-en="Send Your Question">Sorunuzu Gönderin</h2>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:28px" data-tr="Tüm alanları eksiksiz doldurun" data-en="Please fill in all fields">Tüm alanları eksiksiz doldurun</p>
+
+          <div class="form-group">
+            <label data-tr="E-posta Adresiniz" data-en="Your Email">E-posta Adresiniz</label>
+            <input type="email" id="emailInput" placeholder="ornek@email.com" />
+          </div>
+          <div class="form-group">
+            <label data-tr="Konu" data-en="Subject">Konu</label>
+            <input type="text" id="konuInput" placeholder="Beslenme, diyet, tarif..." />
+          </div>
+          <div class="form-group">
+            <label data-tr="Sorunuz" data-en="Your Question">Sorunuz</label>
+            <textarea id="soruInput" placeholder="Sorunuzu buraya yazın..."></textarea>
+          </div>
+          <button class="btn-primary form-submit" id="sendBtn" onclick="sendSoru()" data-tr="Soruyu Gönder" data-en="Send Question">Soruyu Gönder</button>
+          <div id="formFeedback" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- QUESTIONS LIST -->
+      <div>
+        <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:24px" data-tr="Gelen Sorular" data-en="Recent Questions">Gelen Sorular</h2>
+        <div id="questionsList">
+          <div class="skeleton-card" style="height:100px;margin-bottom:12px"></div>
+          <div class="skeleton-card" style="height:100px;margin-bottom:12px"></div>
+          <div class="skeleton-card" style="height:100px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    function questionCard(s) {
+      const d = s.created_at ? new Date(s.created_at).toLocaleDateString('tr-TR') : '';
+      return `<div class="question-card">
+        <div class="question-topic">${s.konu||''}</div>
+        <div class="question-body">${s.soru||''}</div>
+        <div class="question-from">✉️ ${s.email||''} ${d?'· '+d:''}</div>
+      </div>`;
+    }
+
+    async function loadSorular() {
+      const list = document.getElementById('questionsList');
+      try {
+        const { data, error } = await supabaseClient.from('sorular').select('*').order('created_at',{ascending:false}).limit(10);
+        if (error || !data?.length) { list.innerHTML = '<p style="color:var(--text-muted);font-size:.9rem" data-tr="Henüz soru sorulmamış." data-en="No questions yet.">Henüz soru sorulmamış.</p>'; return; }
+        list.innerHTML = data.map(questionCard).join('');
+      } catch { list.innerHTML='<p style="color:var(--text-muted);font-size:.9rem">Yüklenemedi.</p>'; }
+    }
+
+    async function sendSoru() {
+      const email = document.getElementById('emailInput').value.trim();
+      const konu  = document.getElementById('konuInput').value.trim();
+      const soru  = document.getElementById('soruInput').value.trim();
+      const fb    = document.getElementById('formFeedback');
+
+      if (!email || !konu || !soru) {
+        fb.innerHTML = '<div class="alert alert-error" data-tr="Tüm alanları doldurun." data-en="Please fill all fields.">Tüm alanları doldurun.</div>';
+        return;
+      }
+
+      const btn = document.getElementById('sendBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳';
+
+      try {
+        const { error } = await supabaseClient.from('sorular').insert({ email, konu, soru });
+        if (error) throw error;
+        document.getElementById('emailInput').value='';
+        document.getElementById('konuInput').value='';
+        document.getElementById('soruInput').value='';
+        fb.innerHTML = '<div class="alert alert-success" data-tr="✅ Sorunuz iletildi!" data-en="✅ Question sent!">✅ Sorunuz iletildi!</div>';
+        loadSorular();
+      } catch {
+        fb.innerHTML = '<div class="alert alert-error" data-tr="Gönderilemedi, tekrar deneyin." data-en="Failed to send, try again.">Gönderilemedi, tekrar deneyin.</div>';
+      } finally {
+        btn.disabled = false;
+        btn.setAttribute('data-tr','Soruyu Gönder'); btn.setAttribute('data-en','Send Question');
+        applyLang();
+        setTimeout(()=>{ fb.innerHTML=''; }, 5000);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadSorular);
+  </script>
+</body>
+</html>

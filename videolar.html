@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Videolu Tarifler — Dijital Tabağım</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <a href="giris.html" class="btn-login" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1 data-tr="🎥 Videolu Tarifler" data-en="🎥 Video Recipes">🎥 Videolu Tarifler</h1>
+      <p data-tr="Adım adım video içerikleriyle lezzetli tarifler" data-en="Delicious recipes with step-by-step video content">Adım adım video içerikleriyle lezzetli tarifler</p>
+    </div>
+  </div>
+
+  <section style="padding:56px 0;background:var(--bg)">
+    <div class="container">
+      <div class="videos-grid" id="videosGrid">
+        <div class="skeleton-card" style="height:320px"></div>
+        <div class="skeleton-card" style="height:320px"></div>
+        <div class="skeleton-card" style="height:320px"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Supabase'deki video_id'ler — YouTube embed olarak gösterilir
+    const DEMO_VIDEOS = [
+      { id:'v1', baslik:'Menemen Tarifi', video_id:'ajdSDri1c-U' },
+      { id:'v2', baslik:'Kuru Fasulye Tarifi', video_id:'7rORG0W31aE' },
+    ];
+
+    function videoCard(v) {
+      return `<div class="video-card" id="vc-${v.id}">
+        <div class="video-embed">
+          <iframe src="https://www.youtube.com/embed/${v.video_id}" loading="lazy"
+            allowfullscreen title="${v.baslik}"></iframe>
+        </div>
+        <div class="video-info"><h3>${v.baslik}</h3></div>
+      </div>`;
+    }
+
+    async function loadVideos() {
+      const grid = document.getElementById('videosGrid');
+      try {
+        const { data, error } = await supabaseClient.from('videolu_tarifler').select('*').order('created_at',{ascending:false});
+        grid.innerHTML = (error || !data?.length) ? DEMO_VIDEOS.map(videoCard).join('') : data.map(videoCard).join('');
+      } catch { grid.innerHTML = DEMO_VIDEOS.map(videoCard).join(''); }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadVideos);
+  </script>
+</body>
+</html>

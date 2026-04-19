@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dijital Tabağım — Sağlıklı Yaşamın Dijital Adresi</title>
+  <meta name="description" content="Türk mutfağının en lezzetli tarifleri, uzman diyetisyen planları ve sağlıklı yaşam araçları tek platformda." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <a href="giris.html" class="btn-login" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-blob blob1"></div>
+      <div class="hero-blob blob2"></div>
+      <div class="hero-blob blob3"></div>
+    </div>
+    <div class="hero-content">
+      <div class="hero-badge" data-tr="🌿 Sağlıklı Yaşam Platformu" data-en="🌿 Healthy Living Platform">🌿 Sağlıklı Yaşam Platformu</div>
+      <h1 class="hero-title">
+        <span data-tr="Dijital" data-en="Your Digital">Dijital</span>
+        <span class="gradient-text" data-tr="Tabağım" data-en="Plate"> Tabağım</span>
+      </h1>
+      <p class="hero-subtitle" data-tr="Türk mutfağının en lezzetli tariflerini keşfedin. Uzman diyetisyen planlarıyla sağlıklı yaşayın." data-en="Discover the most delicious Turkish recipes. Live healthy with expert dietitian plans.">
+        Türk mutfağının en lezzetli tariflerini keşfedin. Uzman diyetisyen planlarıyla sağlıklı yaşayın.
+      </p>
+      <div class="hero-btns">
+        <a href="tarifler.html" class="btn-primary" data-tr="Tarifleri Keşfet" data-en="Explore Recipes">Tarifleri Keşfet</a>
+        <a href="diyetler.html" class="btn-secondary" data-tr="Diyet Planları" data-en="Diet Plans">Diyet Planları</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number" id="recipeCount">6+</span>
+          <span class="stat-label" data-tr="Tarif" data-en="Recipes">Tarif</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">100%</span>
+          <span class="stat-label" data-tr="Doğal" data-en="Natural">Doğal</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">∞</span>
+          <span class="stat-label" data-tr="Lezzet" data-en="Flavor">Lezzet</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+        <div class="floating-card card-1">
+          <span class="fc-emoji">🥗</span>
+          <div><div class="fc-title" data-tr="Sağlıklı Salata" data-en="Healthy Salad">Sağlıklı Salata</div><div class="fc-meta">⭐ 4.8 · 15 dk</div></div>
+        </div>
+        <div class="floating-card card-2">
+          <span class="fc-emoji">🍲</span>
+          <div><div class="fc-title" data-tr="Kuru Fasulye" data-en="Bean Stew">Kuru Fasulye</div><div class="fc-meta">⭐ 4.8 · 1.5 sa</div></div>
+        </div>
+        <div class="floating-card card-3">
+          <span class="fc-emoji">⚖️</span>
+          <div><div class="fc-title" data-tr="VKİ: Normal" data-en="BMI: Normal">VKİ: Normal</div><div class="fc-meta">🟢 22.4</div></div>
+        </div>
+        <div class="hero-plate">🍽️</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-tr="Neler Sunuyoruz?" data-en="What We Offer">Neler Sunuyoruz?</h2>
+        <p data-tr="Sağlıklı yaşam için ihtiyacınız olan her şey tek platformda" data-en="Everything you need for a healthy life in one platform">Sağlıklı yaşam için ihtiyacınız olan her şey tek platformda</p>
+      </div>
+      <div class="features-grid">
+        <a href="tarifler.html" class="feature-card" id="feat-recipes"><div class="feature-icon">🍳</div><h3 data-tr="Tarifler" data-en="Recipes">Tarifler</h3><p data-tr="Malzeme listeleri ve adım adım talimatlarıyla zengin tarif arşivi" data-en="Rich recipe archive with ingredients and step-by-step instructions">Malzeme listeleri ve adım adım talimatlarıyla zengin tarif arşivi</p><span class="feature-arrow">→</span></a>
+        <a href="diyetler.html" class="feature-card" id="feat-diets"><div class="feature-icon">🥗</div><h3 data-tr="Diyet Planları" data-en="Diet Plans">Diyet Planları</h3><p data-tr="Uzman diyetisyenler tarafından hazırlanmış kişiselleştirilmiş beslenme programları" data-en="Personalized nutrition programs by expert dietitians">Uzman diyetisyenler tarafından hazırlanmış kişiselleştirilmiş beslenme programları</p><span class="feature-arrow">→</span></a>
+        <a href="videolar.html" class="feature-card" id="feat-videos"><div class="feature-icon">🎥</div><h3 data-tr="Videolu Tarifler" data-en="Video Recipes">Videolu Tarifler</h3><p data-tr="YouTube video içerikleriyle tarifleri kolayca öğrenin" data-en="Learn recipes easily with YouTube video content">YouTube video içerikleriyle tarifleri kolayca öğrenin</p><span class="feature-arrow">→</span></a>
+        <a href="vki.html" class="feature-card" id="feat-bmi"><div class="feature-icon">⚖️</div><h3 data-tr="VKİ Hesaplama" data-en="BMI Calculator">VKİ Hesaplama</h3><p data-tr="Vücut kitle indeksinizi hesaplayın, sağlık durumunuzu takip edin" data-en="Calculate your BMI and track your health status">Vücut kitle indeksinizi hesaplayın, sağlık durumunuzu takip edin</p><span class="feature-arrow">→</span></a>
+        <a href="sorular.html" class="feature-card" id="feat-ask"><div class="feature-icon">💬</div><h3 data-tr="Soru Sor" data-en="Ask a Question">Soru Sor</h3><p data-tr="Beslenme ve sağlıklı yaşam hakkında uzmanlarımıza soru sorun" data-en="Ask our experts about nutrition and healthy living">Beslenme ve sağlıklı yaşam hakkında uzmanlarımıza soru sorun</p><span class="feature-arrow">→</span></a>
+        <a href="giris.html" class="feature-card feature-card-highlight" id="feat-app"><div class="feature-icon">📱</div><h3 data-tr="Mobil Uygulama" data-en="Mobile App">Mobil Uygulama</h3><p data-tr="Flutter ile geliştirilen uygulamamızı indirin, her yerde erişin" data-en="Download our Flutter app and access anywhere">Flutter ile geliştirilen uygulamamızı indirin, her yerde erişin</p><span class="feature-arrow">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR RECIPES -->
+  <section class="popular-recipes">
+    <div class="container">
+      <div class="section-header">
+        <h2 data-tr="Popüler Tarifler" data-en="Popular Recipes">Popüler Tarifler</h2>
+        <p data-tr="En çok beğenilen tariflerimizi keşfedin" data-en="Explore our most loved recipes">En çok beğenilen tariflerimizi keşfedin</p>
+      </div>
+      <div class="recipes-grid" id="recipesGrid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+      <div class="section-cta">
+        <a href="tarifler.html" class="btn-outline" data-tr="Tüm Tarifleri Gör" data-en="See All Recipes">Tüm Tarifleri Gör</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BMI TEASER -->
+  <section class="bmi-teaser">
+    <div class="container">
+      <div class="bmi-teaser-inner">
+        <div class="bmi-teaser-content">
+          <div class="bmi-icon">⚖️</div>
+          <h2 data-tr="VKİ'nizi Hemen Hesaplayın" data-en="Calculate Your BMI Now">VKİ'nizi Hemen Hesaplayın</h2>
+          <p data-tr="Vücut Kitle İndeksinizi öğrenin ve sağlıklı yaşam yolculuğunuza başlayın" data-en="Learn your Body Mass Index and start your healthy living journey">Vücut Kitle İndeksinizi öğrenin ve sağlıklı yaşam yolculuğunuza başlayın</p>
+          <div class="bmi-inputs">
+            <div class="bmi-field"><label data-tr="Boy (cm)" data-en="Height (cm)">Boy (cm)</label><input type="number" id="quickBoy" placeholder="170" /></div>
+            <div class="bmi-field"><label data-tr="Kilo (kg)" data-en="Weight (kg)">Kilo (kg)</label><input type="number" id="quickKilo" placeholder="70" /></div>
+          </div>
+          <button class="btn-primary" onclick="quickBmi()" style="margin-top:8px" data-tr="Hesapla" data-en="Calculate">Hesapla</button>
+          <div class="bmi-result" id="bmiResult" style="display:none"></div>
+        </div>
+        <div class="bmi-teaser-visual">
+          <div class="bmi-scale">
+            <div class="scale-item scale-underweight"><span>BMI &lt; 18.5</span><small data-tr="Zayıf" data-en="Underweight">Zayıf</small></div>
+            <div class="scale-item scale-normal active-scale"><span>18.5 – 24.9</span><small data-tr="Normal" data-en="Normal">Normal</small></div>
+            <div class="scale-item scale-overweight"><span>25 – 29.9</span><small data-tr="Fazla Kilolu" data-en="Overweight">Fazla Kilolu</small></div>
+            <div class="scale-item scale-obese"><span>≥ 30</span><small data-tr="Obez" data-en="Obese">Obez</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></div>
+          <p data-tr="Sağlıklı yaşamın dijital adresi." data-en="The digital address of healthy living.">Sağlıklı yaşamın dijital adresi.</p>
+        </div>
+        <div class="footer-links"><h4 data-tr="Sayfalar" data-en="Pages">Sayfalar</h4><ul>
+          <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+          <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+          <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+          <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+          <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+        </ul></div>
+        <div class="footer-links"><h4 data-tr="Hesap" data-en="Account">Hesap</h4><ul>
+          <li><a href="giris.html" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a></li>
+          <li><a href="giris.html#register" data-tr="Kayıt Ol" data-en="Register">Kayıt Ol</a></li>
+        </ul></div>
+        <div class="footer-app">
+          <h4 data-tr="Mobil Uygulama" data-en="Mobile App">Mobil Uygulama</h4>
+          <p data-tr="Flutter ile geliştirilen uygulamamız yakında!" data-en="Our Flutter app coming soon!">Flutter ile geliştirilen uygulamamız yakında!</p>
+          <div class="app-badges">
+            <div class="app-badge"><span>▶</span> Google Play</div>
+            <div class="app-badge"><span>🍎</span> App Store</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p data-tr="© 2025 Dijital Tabağım. Tüm hakları saklıdır." data-en="© 2025 Dijital Tabağım. All rights reserved.">© 2025 Dijital Tabağım. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const DEMOS = [
+      { id: 'd1', name: 'Menemen', category: 'Kahvaltı', duration: '20 dk', rating: 4.7, image_url: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600' },
+      { id: 'd2', name: 'Kuru Fasulye', category: 'Ana Yemek', duration: '1.5 sa', rating: 4.8, image_url: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600' },
+      { id: 'd3', name: 'Fıstıklı Baklava', category: 'Tatlı', duration: '2 sa', rating: 4.9, image_url: 'https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=600' },
+    ];
+
+    function recipeCard(r) {
+      const img = r.image_url ? `<img src="${r.image_url}" alt="${r.name}" loading="lazy" />` : `<div class="recipe-img-placeholder">🍽️</div>`;
+      return `<a href="tarifler.html?id=${r.id}" class="recipe-card" id="rc-${r.id}"><div class="recipe-img">${img}</div><div class="recipe-info"><span class="recipe-category">${r.category||''}</span><h3>${r.name}</h3><div class="recipe-meta"><span>⏱ ${r.duration||'—'}</span><span>⭐ ${r.rating||''}</span></div></div></a>`;
+    }
+
+    async function loadPopular() {
+      const grid = document.getElementById('recipesGrid');
+      try {
+        const { data, error } = await supabaseClient.from('recipes').select('*').order('rating',{ascending:false}).limit(3);
+        grid.innerHTML = (error || !data?.length) ? DEMOS.map(recipeCard).join('') : data.map(recipeCard).join('');
+      } catch { grid.innerHTML = DEMOS.map(recipeCard).join(''); }
+    }
+
+    function quickBmi() {
+      const boy = +document.getElementById('quickBoy').value;
+      const kilo = +document.getElementById('quickKilo').value;
+      if (!boy || !kilo) return;
+      const v = kilo / ((boy/100)**2);
+      const lang = currentLang;
+      let emoji, label;
+      if (v<18.5)     { emoji='🟡'; label=lang==='en'?'Underweight':'Zayıf'; }
+      else if (v<25)  { emoji='🟢'; label=lang==='en'?'Normal':'Normal'; }
+      else if (v<30)  { emoji='🟠'; label=lang==='en'?'Overweight':'Fazla Kilolu'; }
+      else            { emoji='🔴'; label=lang==='en'?'Obese':'Obez'; }
+      const el = document.getElementById('bmiResult');
+      el.style.display='flex'; el.innerHTML=`<span class="bmi-val">${v.toFixed(2)}</span><span>${emoji} ${label}</span>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPopular);
+  </script>
+</body>
+</html>

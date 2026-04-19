@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giriş Yap — Dijital Tabağım</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-card" id="authCard">
+      <div class="auth-logo">
+        <div class="logo-big">🍽️</div>
+        <h2 data-tr="Dijital Tabağım" data-en="Dijital Tabağım">Dijital Tabağım</h2>
+        <p id="authSubtitle" data-tr="Sağlıklı yaşama hoş geldiniz" data-en="Welcome to healthy living">Sağlıklı yaşama hoş geldiniz</p>
+      </div>
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')" data-tr="Giriş Yap" data-en="Login">Giriş Yap</div>
+        <div class="auth-tab" id="tabRegister" onclick="switchTab('register')" data-tr="Kayıt Ol" data-en="Register">Kayıt Ol</div>
+      </div>
+
+      <!-- NAME FIELDS (register only) -->
+      <div class="name-row" id="nameRow" style="display:none">
+        <div class="form-group">
+          <label data-tr="Ad" data-en="First Name">Ad</label>
+          <input type="text" id="adInput" placeholder="Adınız" />
+        </div>
+        <div class="form-group">
+          <label data-tr="Soyad" data-en="Last Name">Soyad</label>
+          <input type="text" id="soyadInput" placeholder="Soyadınız" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label data-tr="E-posta" data-en="Email">E-posta</label>
+        <input type="email" id="emailIn" placeholder="ornek@email.com" />
+      </div>
+      <div class="form-group">
+        <label data-tr="Şifre" data-en="Password">Şifre</label>
+        <input type="password" id="sifreIn" placeholder="••••••••" />
+      </div>
+
+      <div id="authError" style="display:none" class="alert alert-error"></div>
+      <div id="authSuccess" style="display:none" class="alert alert-success"></div>
+
+      <button class="btn-primary form-submit" id="authBtn" onclick="submitAuth()">
+        <span id="authBtnText" data-tr="Giriş Yap" data-en="Login">Giriş Yap</span>
+      </button>
+
+      <p style="text-align:center;margin-top:20px;font-size:.85rem;color:var(--text-muted)">
+        <span id="switchText" data-tr="Hesabınız yok mu?" data-en="Don't have an account?">Hesabınız yok mu?</span>
+        <a href="#" onclick="switchTab(currentMode==='login'?'register':'login')" id="switchLink"
+           style="color:var(--primary);font-weight:700;margin-left:4px"
+           data-tr="Kayıt Ol" data-en="Register">Kayıt Ol</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    let currentMode = 'login';
+
+    // Check hash for direct register link
+    if (window.location.hash === '#register') { currentMode = 'register'; }
+
+    function switchTab(mode) {
+      currentMode = mode;
+      document.getElementById('tabLogin').classList.toggle('active', mode==='login');
+      document.getElementById('tabRegister').classList.toggle('active', mode==='register');
+      document.getElementById('nameRow').style.display = mode==='register' ? 'grid' : 'none';
+      const isEN = currentLang === 'en';
+      document.getElementById('authBtnText').setAttribute('data-tr', mode==='login'?'Giriş Yap':'Hesap Oluştur');
+      document.getElementById('authBtnText').setAttribute('data-en', mode==='login'?'Login':'Create Account');
+      document.getElementById('switchText').setAttribute('data-tr', mode==='login'?'Hesabınız yok mu?':'Zaten hesabınız var mı?');
+      document.getElementById('switchText').setAttribute('data-en', mode==='login'?"Don't have an account?":'Already have an account?');
+      document.getElementById('switchLink').setAttribute('data-tr', mode==='login'?'Kayıt Ol':'Giriş Yap');
+      document.getElementById('switchLink').setAttribute('data-en', mode==='login'?'Register':'Login');
+      document.getElementById('authSubtitle').setAttribute('data-tr', mode==='login'?'Sağlıklı yaşama hoş geldiniz':'Yeni hesabınızı oluşturun');
+      document.getElementById('authSubtitle').setAttribute('data-en', mode==='login'?'Welcome to healthy living':'Create your new account');
+      applyLang();
+      clearMessages();
+    }
+
+    function clearMessages() {
+      document.getElementById('authError').style.display='none';
+      document.getElementById('authSuccess').style.display='none';
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('authError');
+      el.textContent = msg; el.style.display='flex';
+      document.getElementById('authSuccess').style.display='none';
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('authSuccess');
+      el.textContent = msg; el.style.display='flex';
+      document.getElementById('authError').style.display='none';
+    }
+
+    function mapError(msg) {
+      const m = msg.toLowerCase();
+      if (m.includes('invalid login credentials') || m.includes('invalid email or password')) return 'E-posta veya şifre hatalı.';
+      if (m.includes('email not confirmed')) return 'E-postanız henüz onaylanmamış. Gelen kutunuzu kontrol edin.';
+      if (m.includes('already registered') || m.includes('already been registered')) return 'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.';
+      if (m.includes('password')) return 'Şifre en az 6 karakter olmalıdır.';
+      if (m.includes('rate limit')) return 'Çok fazla deneme. Lütfen bekleyip tekrar deneyin.';
+      return msg;
+    }
+
+    async function submitAuth() {
+      clearMessages();
+      const email = document.getElementById('emailIn').value.trim();
+      const sifre = document.getElementById('sifreIn').value;
+      if (!email || !sifre) { showError('Lütfen tüm alanları doldurun.'); return; }
+
+      const btn = document.getElementById('authBtn');
+      btn.disabled = true;
+      btn.querySelector('#authBtnText').textContent = '⏳';
+
+      try {
+        if (currentMode === 'login') {
+          const { error } = await supabaseClient.auth.signInWithPassword({ email, password: sifre });
+          if (error) throw error;
+          window.location.href = 'index.html';
+        } else {
+          const ad    = document.getElementById('adInput').value.trim();
+          const soyad = document.getElementById('soyadInput').value.trim();
+          const { data: res, error } = await supabaseClient.auth.signUp({ email, password: sifre });
+          if (error) throw error;
+          if (res.user) {
+            await supabaseClient.from('profiller').upsert({ user_id: res.user.id, ad, soyad, email }).catch(()=>{});
+          }
+          if (res.user && !res.session) {
+            showSuccess('✅ Kayıt başarılı! E-postanıza gelen onay linkine tıklayın.');
+            switchTab('login');
+          } else {
+            window.location.href = 'index.html';
+          }
+        }
+      } catch(e) {
+        showError(mapError(e.message || 'Bir hata oluştu.'));
+      } finally {
+        btn.disabled = false;
+        applyLang();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (currentMode === 'register') switchTab('register');
+      document.getElementById('sifreIn').addEventListener('keydown', e => { if(e.key==='Enter') submitAuth(); });
+    });
+  </script>
+</body>
+</html>

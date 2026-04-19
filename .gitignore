@@ -1,0 +1,11 @@
+# Supabase credentials — ASLA commit etme!
+config.js
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.suo
+*.user

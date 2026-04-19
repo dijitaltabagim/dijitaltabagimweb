@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diyetler — Dijital Tabağım</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo"><div class="logo-icon">🍽️</div><span>Dijital Tabağım</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" data-tr="Ana Sayfa" data-en="Home">Ana Sayfa</a></li>
+        <li><a href="tarifler.html" data-tr="Tarifler" data-en="Recipes">Tarifler</a></li>
+        <li><a href="diyetler.html" data-tr="Diyetler" data-en="Diets">Diyetler</a></li>
+        <li><a href="videolar.html" data-tr="Videolar" data-en="Videos">Videolar</a></li>
+        <li><a href="vki.html" data-tr="VKİ Hesapla" data-en="BMI Calc">VKİ Hesapla</a></li>
+        <li><a href="sorular.html" data-tr="Soru Sor" data-en="Ask">Soru Sor</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">EN</button>
+        <a href="giris.html" class="btn-login" data-tr="Giriş Yap" data-en="Login">Giriş Yap</a>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1 data-tr="🥗 Diyet Planları" data-en="🥗 Diet Plans">🥗 Diyet Planları</h1>
+      <p data-tr="Uzman diyetisyenler tarafından hazırlanmış beslenme programları" data-en="Nutrition programs prepared by expert dietitians">Uzman diyetisyenler tarafından hazırlanmış beslenme programları</p>
+    </div>
+  </div>
+
+  <section style="padding:56px 0;background:var(--bg)">
+    <div class="container">
+      <div class="diyetler-grid" id="diyetlerGrid">
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+      <div id="emptyMsg" style="display:none;text-align:center;padding:80px;color:var(--text-muted)">
+        <div style="font-size:3rem;margin-bottom:16px">🥗</div>
+        <p data-tr="Henüz diyet planı eklenmemiş." data-en="No diet plans added yet.">Henüz diyet planı eklenmemiş.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+  <script>
+    const DEMO_DIYETLER = [
+      { id:'dd1', baslik:'Akdeniz Diyeti', diyetisyen:'Dyt. Ayşe Kaya', aciklama:'Zeytinyağı, sebze ve tahıllar ağırlıklı sağlıklı Akdeniz beslenme düzeni.', kalori:1800, sure:'4 Hafta' },
+      { id:'dd2', baslik:'Ketojenik Diyet', diyetisyen:'Dyt. Mehmet Yılmaz', aciklama:'Düşük karbonhidrat, yüksek yağ içerikli diyet planı. Kilo verme odaklı.', kalori:1600, sure:'8 Hafta' },
+      { id:'dd3', baslik:'Vejetaryen Beslenme', diyetisyen:'Dyt. Fatma Demir', aciklama:'Et ürünleri tüketmeden dengeli ve yeterli besin alımını sağlayan program.', kalori:2000, sure:'Sürekli' },
+    ];
+
+    function diyetCard(d) {
+      return `<div class="diyet-card" id="dc-${d.id}">
+        <div class="diyet-header">
+          <div class="diyet-avatar">👨‍⚕️</div>
+          <div><div class="diyet-name">${d.baslik}</div><div class="diyet-doc">${d.diyetisyen}</div></div>
+        </div>
+        ${d.aciklama ? `<p class="diyet-desc">${d.aciklama}</p>` : ''}
+        <div class="diyet-chips">
+          ${d.kalori ? `<div class="diyet-chip">🔥 ${d.kalori} kcal</div>` : ''}
+          ${d.sure ? `<div class="diyet-chip">⏱ ${d.sure}</div>` : ''}
+        </div>
+      </div>`;
+    }
+
+    async function loadDiyetler() {
+      const grid = document.getElementById('diyetlerGrid');
+      const empty = document.getElementById('emptyMsg');
+      try {
+        const { data, error } = await supabaseClient.from('diyet_planlari').select('*').order('created_at',{ascending:false});
+        const list = (error || !data?.length) ? DEMO_DIYETLER : data;
+        if (!list.length) { grid.innerHTML=''; empty.style.display='block'; return; }
+        grid.innerHTML = list.map(diyetCard).join('');
+      } catch { grid.innerHTML = DEMO_DIYETLER.map(diyetCard).join(''); }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadDiyetler);
+  </script>
+</body>
+</html>
