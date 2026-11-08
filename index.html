@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dijital Tabağım — Sağlıklı Yaşamın Dijital Adresi</title>
+  <title data-tr="Dijital Tabağım — Sağlıklı Yaşamın Dijital Adresi" data-en="Dijital Tabağım — Your Digital Address for Healthy Living">Dijital Tabağım — Sağlıklı Yaşamın Dijital Adresi</title>
   <meta name="description" content="Türk mutfağının en lezzetli tarifleri, uzman diyetisyen planları ve sağlıklı yaşam araçları tek platformda." />
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <meta property="og:image" content="images/logo-text.png" />
@@ -75,11 +75,11 @@
       <div class="hero-card-stack">
         <div class="floating-card card-1">
           <span class="fc-emoji">🥗</span>
-          <div><div class="fc-title" data-tr="Sağlıklı Salata" data-en="Healthy Salad">Sağlıklı Salata</div><div class="fc-meta">⭐ 4.8 · 15 dk</div></div>
+          <div><div class="fc-title" data-tr="Sağlıklı Salata" data-en="Healthy Salad">Sağlıklı Salata</div><div class="fc-meta" data-tr="⭐ 4.8 · 15 dk" data-en="⭐ 4.8 · 15 min">⭐ 4.8 · 15 dk</div></div>
         </div>
         <div class="floating-card card-2">
           <span class="fc-emoji">🍲</span>
-          <div><div class="fc-title" data-tr="Kuru Fasulye" data-en="Bean Stew">Kuru Fasulye</div><div class="fc-meta">⭐ 4.8 · 1.5 sa</div></div>
+          <div><div class="fc-title" data-tr="Kuru Fasulye" data-en="Bean Stew">Kuru Fasulye</div><div class="fc-meta" data-tr="⭐ 4.8 · 1.5 sa" data-en="⭐ 4.8 · 1.5 h">⭐ 4.8 · 1.5 sa</div></div>
         </div>
         <div class="floating-card card-3">
           <span class="fc-emoji">⚖️</span>
@@ -192,22 +192,25 @@
   <script src="app.js"></script>
   <script>
     const DEMOS = [
-      { id: 'd1', name: 'Menemen', category: 'Kahvaltı', duration: '20 dk', rating: 4.7, image_url: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600' },
-      { id: 'd2', name: 'Kuru Fasulye', category: 'Ana Yemek', duration: '1.5 sa', rating: 4.8, image_url: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600' },
-      { id: 'd3', name: 'Fıstıklı Baklava', category: 'Tatlı', duration: '2 sa', rating: 4.9, image_url: 'https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=600' },
+      { id: 'd1', name: 'Menemen', name_en: 'Menemen (Turkish Scrambled Eggs)', category: 'Kahvaltı', category_en: 'Breakfast', duration: '20 dk', duration_en: '20 min', rating: 4.7, image_url: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600' },
+      { id: 'd2', name: 'Kuru Fasulye', name_en: 'Turkish Bean Stew', category: 'Ana Yemek', category_en: 'Main Course', duration: '1.5 sa', duration_en: '1.5 h', rating: 4.8, image_url: 'https://images.unsplash.com/photo-1547592180-85f173990554?w=600' },
+      { id: 'd3', name: 'Fıstıklı Baklava', name_en: 'Pistachio Baklava', category: 'Tatlı', category_en: 'Dessert', duration: '2 sa', duration_en: '2 h', rating: 4.9, image_url: 'https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=600' },
     ];
 
     function recipeCard(r) {
-      const img = r.image_url ? `<img src="${r.image_url}" alt="${r.name}" loading="lazy" />` : `<div class="recipe-img-placeholder">🍽️</div>`;
-      return `<a href="tarifler.html?id=${r.id}" class="recipe-card" id="rc-${r.id}"><div class="recipe-img">${img}</div><div class="recipe-info"><span class="recipe-category">${r.category||''}</span><h3>${r.name}</h3><div class="recipe-meta"><span>⏱ ${r.duration||'—'}</span><span>⭐ ${r.rating||''}</span></div></div></a>`;
+      const name = L(r,'name');
+      const img = r.image_url ? `<img src="${r.image_url}" alt="${name}" loading="lazy" />` : `<div class="recipe-img-placeholder">🍽️</div>`;
+      return `<a href="tarifler.html?id=${r.id}" class="recipe-card" id="rc-${r.id}"><div class="recipe-img">${img}</div><div class="recipe-info"><span class="recipe-category">${L(r,'category')||''}</span><h3>${name}</h3><div class="recipe-meta"><span>⏱ ${L(r,'duration')||'—'}</span><span>⭐ ${r.rating||''}</span></div></div></a>`;
     }
 
+    let popular = DEMOS;
+    function renderPopular() { document.getElementById('recipesGrid').innerHTML = popular.map(recipeCard).join(''); }
     async function loadPopular() {
-      const grid = document.getElementById('recipesGrid');
       try {
         const { data, error } = await supabaseClient.from('recipes').select('*').order('rating',{ascending:false}).limit(3);
-        grid.innerHTML = (error || !data?.length) ? DEMOS.map(recipeCard).join('') : data.map(recipeCard).join('');
-      } catch { grid.innerHTML = DEMOS.map(recipeCard).join(''); }
+        if (!error && data?.length) popular = data;
+      } catch {}
+      renderPopular();
     }
 
     function quickBmi() {
@@ -226,6 +229,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadPopular);
+    document.addEventListener('langchange', () => {
+      renderPopular();
+      if (document.getElementById('bmiResult').style.display !== 'none') quickBmi();
+    });
   </script>
 </body>
 </html>

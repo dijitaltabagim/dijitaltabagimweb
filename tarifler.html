@@ -71,23 +71,38 @@
   <script src="app.js"></script>
   <script>
     const DEMO_RECIPES = [
-      { id:'d1', name:'Menemen', category:'Kahvaltı', duration:'20 dk', rating:4.7, image_url:'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600', ingredients:['3 yumurta','2 domates','1 yeşil biber','Zeytinyağı','Tuz, karabiber'], instructions:['Soğanı kavurun','Biberi ekleyin','Domatesi ekleyin','Yumurtaları kırın','Pişirin ve servis edin'] },
-      { id:'d2', name:'Kuru Fasulye', category:'Ana Yemek', duration:'1.5 sa', rating:4.8, image_url:'https://images.unsplash.com/photo-1547592180-85f173990554?w=600', ingredients:['500g kuru fasulye','Salça','Soğan','Et/sucuk','Tuz'], instructions:['Fasulyeyi ıslatın','Haşlayın','Salça ile kavurun','Birleştirin','Kısık ateşte pişirin'] },
-      { id:'d3', name:'Kayseri Mantısı', category:'Ana Yemek', duration:'1 sa', rating:4.9, image_url:'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=600', ingredients:['2 bardak un','1 yumurta','200g kıyma','Yoğurt','Sarımsak'], instructions:['Hamuru yoğurun','İç harcı hazırlayın','Mantıları yapın','Haşlayın','Sosla servis edin'] },
-      { id:'d4', name:'Fıstıklı Baklava', category:'Tatlı', duration:'2 sa', rating:4.9, image_url:'https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=600', ingredients:['500g yufka','300g fıstık','250g tereyağı','Şerbet'], instructions:['Şerbeti hazırlayın','Yufkaları yayın','Fıstık serpin','Fırınlayın','Şerbet dökün'] },
-      { id:'d5', name:'Mercimek Çorbası', category:'Çorba', duration:'35 dk', rating:4.6, image_url:'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600', ingredients:['1 bardak mercimek','Soğan','Havuç','Patates','Baharatlar'], instructions:['Sebzeleri doğrayın','Kavurun','Su ekleyin','Pişirin','Blenderdan geçirin'] },
-      { id:'d6', name:'İmam Bayıldı', category:'Sebze Yemeği', duration:'1 sa 10 dk', rating:4.5, image_url:'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600', ingredients:['4 patlıcan','3 soğan','4 domates','Zeytinyağı','Sarımsak'], instructions:['Patlıcanları kavurun','İç harcı hazırlayın','Doldurun','Tencereye dizin','Pişirin'] },
+      { id:'d1', name:'Menemen', name_en:'Menemen (Turkish Scrambled Eggs)', category:'Kahvaltı', category_en:'Breakfast', duration:'20 dk', duration_en:'20 min', rating:4.7, image_url:'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600',
+        ingredients:['3 yumurta','2 domates','1 yeşil biber','Zeytinyağı','Tuz, karabiber'], ingredients_en:['3 eggs','2 tomatoes','1 green pepper','Olive oil','Salt, black pepper'],
+        instructions:['Soğanı kavurun','Biberi ekleyin','Domatesi ekleyin','Yumurtaları kırın','Pişirin ve servis edin'], instructions_en:['Sauté the onion','Add the pepper','Add the tomatoes','Crack in the eggs','Cook and serve'] },
+      { id:'d2', name:'Kuru Fasulye', name_en:'Turkish Bean Stew', category:'Ana Yemek', category_en:'Main Course', duration:'1.5 sa', duration_en:'1.5 h', rating:4.8, image_url:'https://images.unsplash.com/photo-1547592180-85f173990554?w=600',
+        ingredients:['500g kuru fasulye','Salça','Soğan','Et/sucuk','Tuz'], ingredients_en:['500g dried white beans','Tomato paste','Onion','Meat/sujuk','Salt'],
+        instructions:['Fasulyeyi ıslatın','Haşlayın','Salça ile kavurun','Birleştirin','Kısık ateşte pişirin'], instructions_en:['Soak the beans','Boil them','Sauté with tomato paste','Combine','Simmer on low heat'] },
+      { id:'d3', name:'Kayseri Mantısı', name_en:'Kayseri Manti (Turkish Dumplings)', category:'Ana Yemek', category_en:'Main Course', duration:'1 sa', duration_en:'1 h', rating:4.9, image_url:'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?w=600',
+        ingredients:['2 bardak un','1 yumurta','200g kıyma','Yoğurt','Sarımsak'], ingredients_en:['2 cups flour','1 egg','200g ground meat','Yogurt','Garlic'],
+        instructions:['Hamuru yoğurun','İç harcı hazırlayın','Mantıları yapın','Haşlayın','Sosla servis edin'], instructions_en:['Knead the dough','Prepare the filling','Shape the dumplings','Boil them','Serve with sauce'] },
+      { id:'d4', name:'Fıstıklı Baklava', name_en:'Pistachio Baklava', category:'Tatlı', category_en:'Dessert', duration:'2 sa', duration_en:'2 h', rating:4.9, image_url:'https://images.unsplash.com/photo-1619221882220-947b3d3c8861?w=600',
+        ingredients:['500g yufka','300g fıstık','250g tereyağı','Şerbet'], ingredients_en:['500g phyllo dough','300g pistachios','250g butter','Syrup'],
+        instructions:['Şerbeti hazırlayın','Yufkaları yayın','Fıstık serpin','Fırınlayın','Şerbet dökün'], instructions_en:['Prepare the syrup','Lay out the phyllo sheets','Sprinkle pistachios','Bake','Pour the syrup over'] },
+      { id:'d5', name:'Mercimek Çorbası', name_en:'Red Lentil Soup', category:'Çorba', category_en:'Soup', duration:'35 dk', duration_en:'35 min', rating:4.6, image_url:'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600',
+        ingredients:['1 bardak mercimek','Soğan','Havuç','Patates','Baharatlar'], ingredients_en:['1 cup lentils','Onion','Carrot','Potato','Spices'],
+        instructions:['Sebzeleri doğrayın','Kavurun','Su ekleyin','Pişirin','Blenderdan geçirin'], instructions_en:['Chop the vegetables','Sauté','Add water','Cook','Blend until smooth'] },
+      { id:'d6', name:'İmam Bayıldı', name_en:'Imam Bayildi (Stuffed Eggplant)', category:'Sebze Yemeği', category_en:'Vegetable Dish', duration:'1 sa 10 dk', duration_en:'1 h 10 min', rating:4.5, image_url:'https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?w=600',
+        ingredients:['4 patlıcan','3 soğan','4 domates','Zeytinyağı','Sarımsak'], ingredients_en:['4 eggplants','3 onions','4 tomatoes','Olive oil','Garlic'],
+        instructions:['Patlıcanları kavurun','İç harcı hazırlayın','Doldurun','Tencereye dizin','Pişirin'], instructions_en:['Fry the eggplants','Prepare the filling','Stuff them','Arrange in a pot','Cook'] },
     ];
 
     let allRecipes = [];
     let activeCategory = 'all';
+    let openId = null;
 
     function recipeCard(r) {
-      const img = r.image_url ? `<img src="${r.image_url}" alt="${r.name}" loading="lazy"/>` : `<div class="recipe-img-placeholder">🍽️</div>`;
-      return `<div class="recipe-card" id="rc-${r.id}" onclick='openModal(${JSON.stringify(r).replace(/'/g,"\\'")})'><div class="recipe-img">${img}</div><div class="recipe-info"><span class="recipe-category">${r.category||''}</span><h3>${r.name}</h3><div class="recipe-meta"><span>⏱ ${r.duration||'—'}</span><span>⭐ ${r.rating||''}</span></div></div></div>`;
+      const name = L(r,'name');
+      const img = r.image_url ? `<img src="${r.image_url}" alt="${name}" loading="lazy"/>` : `<div class="recipe-img-placeholder">🍽️</div>`;
+      return `<div class="recipe-card" id="rc-${r.id}" onclick="openModal('${r.id}')"><div class="recipe-img">${img}</div><div class="recipe-info"><span class="recipe-category">${L(r,'category')||''}</span><h3>${name}</h3><div class="recipe-meta"><span>⏱ ${L(r,'duration')||'—'}</span><span>⭐ ${r.rating||''}</span></div></div></div>`;
     }
 
-    function renderRecipes(list) {
+    function renderRecipes() {
+      const list = activeCategory==='all' ? allRecipes : allRecipes.filter(r=>r.category===activeCategory);
       const grid = document.getElementById('recipesGrid');
       const noResult = document.getElementById('noResult');
       if (!list.length) { grid.innerHTML=''; noResult.style.display='block'; return; }
@@ -99,42 +114,49 @@
       document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
       btn.classList.add('active');
       activeCategory = btn.dataset.cat;
-      const filtered = activeCategory==='all' ? allRecipes : allRecipes.filter(r=>r.category===activeCategory);
-      renderRecipes(filtered);
+      renderRecipes();
     }
 
-    function buildFilters(recipes) {
-      const cats = [...new Set(recipes.map(r=>r.category).filter(Boolean))];
+    function buildFilters() {
       const bar = document.getElementById('filterInner');
-      cats.forEach(c => {
+      bar.querySelectorAll('.filter-chip:not([data-cat="all"])').forEach(b=>b.remove());
+      const seen = new Set();
+      allRecipes.forEach(r => {
+        if (!r.category || seen.has(r.category)) return;
+        seen.add(r.category);
         const btn = document.createElement('button');
-        btn.className='filter-chip'; btn.dataset.cat=c; btn.textContent=c;
+        btn.className='filter-chip' + (r.category===activeCategory ? ' active' : '');
+        btn.dataset.cat=r.category; btn.textContent=L(r,'category');
         btn.onclick=()=>filterCat(btn);
         bar.appendChild(btn);
       });
     }
 
-    function openModal(r) {
-      const ingredients = (r.ingredients||[]).map(i=>`<li>${i}</li>`).join('');
-      const steps = (r.instructions||[]).map((s,i)=>`<div style="display:flex;gap:12px;margin-bottom:12px"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem">${i+1}</div><p style="margin:0;font-size:.9rem;color:var(--text-muted);padding-top:4px">${s}</p></div>`).join('');
+    function openModal(id) {
+      const r = allRecipes.find(x=>String(x.id)===String(id));
+      if (!r) return;
+      openId = r.id;
+      const ingredients = (L(r,'ingredients')||[]).map(i=>`<li>${i}</li>`).join('');
+      const steps = (L(r,'instructions')||[]).map((s,i)=>`<div style="display:flex;gap:12px;margin-bottom:12px"><div style="min-width:28px;height:28px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem">${i+1}</div><p style="margin:0;font-size:.9rem;color:var(--text-muted);padding-top:4px">${s}</p></div>`).join('');
       const img = r.image_url ? `<img src="${r.image_url}" style="width:100%;height:240px;object-fit:cover" />` : '';
       document.getElementById('modalContent').innerHTML = `
         ${img}
         <div style="padding:28px">
-          <span style="font-size:.75rem;font-weight:700;color:var(--primary);text-transform:uppercase">${r.category||''}</span>
-          <h2 style="font-size:1.6rem;font-weight:800;color:var(--text);margin:8px 0 6px">${r.name}</h2>
+          <span style="font-size:.75rem;font-weight:700;color:var(--primary);text-transform:uppercase">${L(r,'category')||''}</span>
+          <h2 style="font-size:1.6rem;font-weight:800;color:var(--text);margin:8px 0 6px">${L(r,'name')}</h2>
           <div style="display:flex;gap:16px;font-size:.85rem;color:var(--text-muted);margin-bottom:24px">
-            <span>⏱ ${r.duration||'—'}</span><span>⭐ ${r.rating||''}</span>
+            <span>⏱ ${L(r,'duration')||'—'}</span><span>⭐ ${r.rating||''}</span>
           </div>
-          ${ingredients ? `<h3 style="font-size:1rem;font-weight:700;margin-bottom:12px">🧂 Malzemeler</h3><ul style="padding-left:20px;margin-bottom:24px;color:var(--text-muted);font-size:.9rem;line-height:1.8">${ingredients}</ul>` : ''}
-          ${steps ? `<h3 style="font-size:1rem;font-weight:700;margin-bottom:16px">👨‍🍳 Yapılışı</h3>${steps}` : ''}
-          <button onclick="closeModal()" style="margin-top:8px;padding:12px 24px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-weight:600;cursor:pointer">Kapat</button>
+          ${ingredients ? `<h3 style="font-size:1rem;font-weight:700;margin-bottom:12px">🧂 ${t('Malzemeler','Ingredients')}</h3><ul style="padding-left:20px;margin-bottom:24px;color:var(--text-muted);font-size:.9rem;line-height:1.8">${ingredients}</ul>` : ''}
+          ${steps ? `<h3 style="font-size:1rem;font-weight:700;margin-bottom:16px">👨‍🍳 ${t('Yapılışı','Instructions')}</h3>${steps}` : ''}
+          <button onclick="closeModal()" style="margin-top:8px;padding:12px 24px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-weight:600;cursor:pointer">${t('Kapat','Close')}</button>
         </div>`;
       document.getElementById('modalOverlay').style.display='flex';
       document.body.style.overflow='hidden';
     }
 
     function closeModal() {
+      openId = null;
       document.getElementById('modalOverlay').style.display='none';
       document.body.style.overflow='';
     }
@@ -146,11 +168,14 @@
         const { data, error } = await supabaseClient.from('recipes').select('*').order('rating',{ascending:false});
         allRecipes = (error || !data?.length) ? DEMO_RECIPES : data;
       } catch { allRecipes = DEMO_RECIPES; }
-      buildFilters(allRecipes);
-      renderRecipes(allRecipes);
+      buildFilters();
+      renderRecipes();
+      const qid = new URLSearchParams(location.search).get('id');
+      if (qid) openModal(qid);
     }
 
     document.addEventListener('DOMContentLoaded', loadRecipes);
+    document.addEventListener('langchange', () => { buildFilters(); renderRecipes(); if (openId) openModal(openId); });
   </script>
 </body>
 </html>

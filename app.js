@@ -11,6 +11,9 @@ function applyLang() {
   document.querySelectorAll('[data-tr]').forEach(el => {
     el.textContent = currentLang === 'en' ? el.dataset.en : el.dataset.tr;
   });
+  document.querySelectorAll('[data-tr-ph]').forEach(el => {
+    el.placeholder = currentLang === 'en' ? el.dataset.enPh : el.dataset.trPh;
+  });
   const btn = document.getElementById('langToggle');
   if (btn) btn.textContent = currentLang === 'tr' ? 'EN' : 'TR';
 }
@@ -19,7 +22,15 @@ function toggleLang() {
   currentLang = currentLang === 'tr' ? 'en' : 'tr';
   localStorage.setItem('dt_lang', currentLang);
   applyLang();
+  document.dispatchEvent(new Event('langchange')); // sayfalar dinamik içeriği yeniden çizer
 }
+
+/* Dinamik metin: t('Türkçe', 'English') */
+function t(tr, en) { return currentLang === 'en' ? en : tr; }
+/* Veri alanı: varsa obj.key_en kullanılır, yoksa obj.key (Supabase'e *_en kolonları eklenirse otomatik çalışır) */
+function L(obj, key) { return (currentLang === 'en' && obj[key + '_en']) || obj[key]; }
+/* Tarih, dile göre */
+function fmtDate(d) { return new Date(d).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'tr-TR'); }
 
 document.addEventListener('DOMContentLoaded', () => {
   applyLang();

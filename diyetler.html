@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Diyetler — Dijital Tabağım</title>
+  <title data-tr="Diyetler — Dijital Tabağım" data-en="Diets — Dijital Tabağım">Diyetler — Dijital Tabağım</title>
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -49,44 +49,50 @@
     </div>
   </section>
 
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p data-tr="© 2025 Dijital Tabağım. Tüm hakları saklıdır." data-en="© 2025 Dijital Tabağım. All rights reserved.">© 2025 Dijital Tabağım. Tüm hakları saklıdır.</p></div></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
   <script>
     const DEMO_DIYETLER = [
-      { id:'dd1', baslik:'Akdeniz Diyeti', diyetisyen:'Dyt. Ayşe Kaya', aciklama:'Zeytinyağı, sebze ve tahıllar ağırlıklı sağlıklı Akdeniz beslenme düzeni.', kalori:1800, sure:'4 Hafta' },
-      { id:'dd2', baslik:'Ketojenik Diyet', diyetisyen:'Dyt. Mehmet Yılmaz', aciklama:'Düşük karbonhidrat, yüksek yağ içerikli diyet planı. Kilo verme odaklı.', kalori:1600, sure:'8 Hafta' },
-      { id:'dd3', baslik:'Vejetaryen Beslenme', diyetisyen:'Dyt. Fatma Demir', aciklama:'Et ürünleri tüketmeden dengeli ve yeterli besin alımını sağlayan program.', kalori:2000, sure:'Sürekli' },
+      { id:'dd1', baslik:'Akdeniz Diyeti', baslik_en:'Mediterranean Diet', diyetisyen:'Dyt. Ayşe Kaya', diyetisyen_en:'Dietitian Ayşe Kaya', aciklama:'Zeytinyağı, sebze ve tahıllar ağırlıklı sağlıklı Akdeniz beslenme düzeni.', aciklama_en:'A healthy Mediterranean eating pattern rich in olive oil, vegetables and grains.', kalori:1800, sure:'4 Hafta', sure_en:'4 Weeks' },
+      { id:'dd2', baslik:'Ketojenik Diyet', baslik_en:'Ketogenic Diet', diyetisyen:'Dyt. Mehmet Yılmaz', diyetisyen_en:'Dietitian Mehmet Yılmaz', aciklama:'Düşük karbonhidrat, yüksek yağ içerikli diyet planı. Kilo verme odaklı.', aciklama_en:'A low-carb, high-fat diet plan focused on weight loss.', kalori:1600, sure:'8 Hafta', sure_en:'8 Weeks' },
+      { id:'dd3', baslik:'Vejetaryen Beslenme', baslik_en:'Vegetarian Nutrition', diyetisyen:'Dyt. Fatma Demir', diyetisyen_en:'Dietitian Fatma Demir', aciklama:'Et ürünleri tüketmeden dengeli ve yeterli besin alımını sağlayan program.', aciklama_en:'A program providing balanced, sufficient nutrition without meat products.', kalori:2000, sure:'Sürekli', sure_en:'Ongoing' },
     ];
+    let diyetler = [];
 
     function diyetCard(d) {
+      const desc = L(d,'aciklama'), sure = L(d,'sure');
       return `<div class="diyet-card" id="dc-${d.id}">
         <div class="diyet-header">
           <div class="diyet-avatar">👨‍⚕️</div>
-          <div><div class="diyet-name">${d.baslik}</div><div class="diyet-doc">${d.diyetisyen}</div></div>
+          <div><div class="diyet-name">${L(d,'baslik')}</div><div class="diyet-doc">${L(d,'diyetisyen')}</div></div>
         </div>
-        ${d.aciklama ? `<p class="diyet-desc">${d.aciklama}</p>` : ''}
+        ${desc ? `<p class="diyet-desc">${desc}</p>` : ''}
         <div class="diyet-chips">
           ${d.kalori ? `<div class="diyet-chip">🔥 ${d.kalori} kcal</div>` : ''}
-          ${d.sure ? `<div class="diyet-chip">⏱ ${d.sure}</div>` : ''}
+          ${sure ? `<div class="diyet-chip">⏱ ${sure}</div>` : ''}
         </div>
       </div>`;
     }
 
-    async function loadDiyetler() {
+    function renderDiyetler() {
       const grid = document.getElementById('diyetlerGrid');
-      const empty = document.getElementById('emptyMsg');
+      if (!diyetler.length) { grid.innerHTML=''; document.getElementById('emptyMsg').style.display='block'; return; }
+      grid.innerHTML = diyetler.map(diyetCard).join('');
+    }
+
+    async function loadDiyetler() {
       try {
         const { data, error } = await supabaseClient.from('diyet_planlari').select('*').order('created_at',{ascending:false});
-        const list = (error || !data?.length) ? DEMO_DIYETLER : data;
-        if (!list.length) { grid.innerHTML=''; empty.style.display='block'; return; }
-        grid.innerHTML = list.map(diyetCard).join('');
-      } catch { grid.innerHTML = DEMO_DIYETLER.map(diyetCard).join(''); }
+        diyetler = (error || !data?.length) ? DEMO_DIYETLER : data;
+      } catch { diyetler = DEMO_DIYETLER; }
+      renderDiyetler();
     }
 
     document.addEventListener('DOMContentLoaded', loadDiyetler);
+    document.addEventListener('langchange', renderDiyetler);
   </script>
 </body>
 </html>

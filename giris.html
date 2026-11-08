@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Giriş Yap — Dijital Tabağım</title>
+  <title data-tr="Giriş Yap — Dijital Tabağım" data-en="Login — Dijital Tabağım">Giriş Yap — Dijital Tabağım</title>
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -45,17 +45,17 @@
       <div class="name-row" id="nameRow" style="display:none">
         <div class="form-group">
           <label data-tr="Ad" data-en="First Name">Ad</label>
-          <input type="text" id="adInput" placeholder="Adınız" />
+          <input type="text" id="adInput" placeholder="Adınız" data-tr-ph="Adınız" data-en-ph="Your first name" />
         </div>
         <div class="form-group">
           <label data-tr="Soyad" data-en="Last Name">Soyad</label>
-          <input type="text" id="soyadInput" placeholder="Soyadınız" />
+          <input type="text" id="soyadInput" placeholder="Soyadınız" data-tr-ph="Soyadınız" data-en-ph="Your last name" />
         </div>
       </div>
 
       <div class="form-group">
         <label data-tr="E-posta" data-en="Email">E-posta</label>
-        <input type="email" id="emailIn" placeholder="ornek@email.com" />
+        <input type="email" id="emailIn" placeholder="ornek@email.com" data-tr-ph="ornek@email.com" data-en-ph="example@email.com" />
       </div>
       <div class="form-group">
         <label data-tr="Şifre" data-en="Password">Şifre</label>
@@ -124,11 +124,11 @@
 
     function mapError(msg) {
       const m = msg.toLowerCase();
-      if (m.includes('invalid login credentials') || m.includes('invalid email or password')) return 'E-posta veya şifre hatalı.';
-      if (m.includes('email not confirmed')) return 'E-postanız henüz onaylanmamış. Gelen kutunuzu kontrol edin.';
-      if (m.includes('already registered') || m.includes('already been registered')) return 'Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.';
-      if (m.includes('password')) return 'Şifre en az 6 karakter olmalıdır.';
-      if (m.includes('rate limit')) return 'Çok fazla deneme. Lütfen bekleyip tekrar deneyin.';
+      if (m.includes('invalid login credentials') || m.includes('invalid email or password')) return t('E-posta veya şifre hatalı.','Incorrect email or password.');
+      if (m.includes('email not confirmed')) return t('E-postanız henüz onaylanmamış. Gelen kutunuzu kontrol edin.','Your email is not confirmed yet. Please check your inbox.');
+      if (m.includes('already registered') || m.includes('already been registered')) return t('Bu e-posta zaten kayıtlı. Giriş yapmayı deneyin.','This email is already registered. Try logging in.');
+      if (m.includes('password')) return t('Şifre en az 6 karakter olmalıdır.','Password must be at least 6 characters.');
+      if (m.includes('rate limit')) return t('Çok fazla deneme. Lütfen bekleyip tekrar deneyin.','Too many attempts. Please wait and try again.');
       return msg;
     }
 
@@ -136,7 +136,7 @@
       clearMessages();
       const email = document.getElementById('emailIn').value.trim();
       const sifre = document.getElementById('sifreIn').value;
-      if (!email || !sifre) { showError('Lütfen tüm alanları doldurun.'); return; }
+      if (!email || !sifre) { showError(t('Lütfen tüm alanları doldurun.','Please fill in all fields.')); return; }
 
       const btn = document.getElementById('authBtn');
       btn.disabled = true;
@@ -156,14 +156,14 @@
             await supabaseClient.from('profiller').upsert({ user_id: res.user.id, ad, soyad, email }).catch(()=>{});
           }
           if (res.user && !res.session) {
-            showSuccess('✅ Kayıt başarılı! E-postanıza gelen onay linkine tıklayın.');
-            switchTab('login');
+            switchTab('login'); // önce sekme (mesajları temizler), sonra başarı mesajı
+            showSuccess('✅ ' + t('Kayıt başarılı! E-postanıza gelen onay linkine tıklayın.','Registration successful! Click the confirmation link sent to your email.'));
           } else {
             window.location.href = 'index.html';
           }
         }
       } catch(e) {
-        showError(mapError(e.message || 'Bir hata oluştu.'));
+        showError(mapError(e.message || t('Bir hata oluştu.','Something went wrong.')));
       } finally {
         btn.disabled = false;
         applyLang();

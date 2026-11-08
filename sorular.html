@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Soru Sor — Dijital Tabağım</title>
+  <title data-tr="Soru Sor — Dijital Tabağım" data-en="Ask a Question — Dijital Tabağım">Soru Sor — Dijital Tabağım</title>
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -46,15 +46,15 @@
 
           <div class="form-group">
             <label data-tr="E-posta Adresiniz" data-en="Your Email">E-posta Adresiniz</label>
-            <input type="email" id="emailInput" placeholder="ornek@email.com" />
+            <input type="email" id="emailInput" placeholder="ornek@email.com" data-tr-ph="ornek@email.com" data-en-ph="example@email.com" />
           </div>
           <div class="form-group">
             <label data-tr="Konu" data-en="Subject">Konu</label>
-            <input type="text" id="konuInput" placeholder="Beslenme, diyet, tarif..." />
+            <input type="text" id="konuInput" placeholder="Beslenme, diyet, tarif..." data-tr-ph="Beslenme, diyet, tarif..." data-en-ph="Nutrition, diet, recipe..." />
           </div>
           <div class="form-group">
             <label data-tr="Sorunuz" data-en="Your Question">Sorunuz</label>
-            <textarea id="soruInput" placeholder="Sorunuzu buraya yazın..."></textarea>
+            <textarea id="soruInput" placeholder="Sorunuzu buraya yazın..." data-tr-ph="Sorunuzu buraya yazın..." data-en-ph="Write your question here..."></textarea>
           </div>
           <button class="btn-primary form-submit" id="sendBtn" onclick="sendSoru()" data-tr="Soruyu Gönder" data-en="Send Question">Soruyu Gönder</button>
           <div id="formFeedback" style="margin-top:12px"></div>
@@ -73,14 +73,14 @@
     </div>
   </section>
 
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p data-tr="© 2025 Dijital Tabağım. Tüm hakları saklıdır." data-en="© 2025 Dijital Tabağım. All rights reserved.">© 2025 Dijital Tabağım. Tüm hakları saklıdır.</p></div></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
   <script>
     function questionCard(s) {
-      const d = s.created_at ? new Date(s.created_at).toLocaleDateString('tr-TR') : '';
+      const d = s.created_at ? fmtDate(s.created_at) : '';
       return `<div class="question-card">
         <div class="question-topic">${s.konu||''}</div>
         <div class="question-body">${s.soru||''}</div>
@@ -92,9 +92,9 @@
       const list = document.getElementById('questionsList');
       try {
         const { data, error } = await supabaseClient.from('sorular').select('*').order('created_at',{ascending:false}).limit(10);
-        if (error || !data?.length) { list.innerHTML = '<p style="color:var(--text-muted);font-size:.9rem" data-tr="Henüz soru sorulmamış." data-en="No questions yet.">Henüz soru sorulmamış.</p>'; return; }
+        if (error || !data?.length) { list.innerHTML = `<p style="color:var(--text-muted);font-size:.9rem">${t('Henüz soru sorulmamış.','No questions yet.')}</p>`; return; }
         list.innerHTML = data.map(questionCard).join('');
-      } catch { list.innerHTML='<p style="color:var(--text-muted);font-size:.9rem">Yüklenemedi.</p>'; }
+      } catch { list.innerHTML=`<p style="color:var(--text-muted);font-size:.9rem">${t('Yüklenemedi.','Could not load.')}</p>`; }
     }
 
     async function sendSoru() {
@@ -104,7 +104,7 @@
       const fb    = document.getElementById('formFeedback');
 
       if (!email || !konu || !soru) {
-        fb.innerHTML = '<div class="alert alert-error" data-tr="Tüm alanları doldurun." data-en="Please fill all fields.">Tüm alanları doldurun.</div>';
+        fb.innerHTML = `<div class="alert alert-error">${t('Tüm alanları doldurun.','Please fill in all fields.')}</div>`;
         return;
       }
 
@@ -118,10 +118,10 @@
         document.getElementById('emailInput').value='';
         document.getElementById('konuInput').value='';
         document.getElementById('soruInput').value='';
-        fb.innerHTML = '<div class="alert alert-success" data-tr="✅ Sorunuz iletildi!" data-en="✅ Question sent!">✅ Sorunuz iletildi!</div>';
+        fb.innerHTML = `<div class="alert alert-success">✅ ${t('Sorunuz iletildi!','Your question has been sent!')}</div>`;
         loadSorular();
       } catch {
-        fb.innerHTML = '<div class="alert alert-error" data-tr="Gönderilemedi, tekrar deneyin." data-en="Failed to send, try again.">Gönderilemedi, tekrar deneyin.</div>';
+        fb.innerHTML = `<div class="alert alert-error">${t('Gönderilemedi, tekrar deneyin.','Could not send, please try again.')}</div>`;
       } finally {
         btn.disabled = false;
         btn.setAttribute('data-tr','Soruyu Gönder'); btn.setAttribute('data-en','Send Question');
@@ -131,6 +131,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadSorular);
+    document.addEventListener('langchange', loadSorular);
   </script>
 </body>
 </html>

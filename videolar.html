@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Videolu Tarifler — Dijital Tabağım</title>
+  <title data-tr="Videolu Tarifler — Dijital Tabağım" data-en="Video Recipes — Dijital Tabağım">Videolu Tarifler — Dijital Tabağım</title>
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -45,7 +45,7 @@
     </div>
   </section>
 
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p data-tr="© 2025 Dijital Tabağım. Tüm hakları saklıdır." data-en="© 2025 Dijital Tabağım. All rights reserved.">© 2025 Dijital Tabağım. Tüm hakları saklıdır.</p></div></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
@@ -53,29 +53,34 @@
   <script>
     // Supabase'deki video_id'ler — YouTube embed olarak gösterilir
     const DEMO_VIDEOS = [
-      { id:'v1', baslik:'Menemen Tarifi', video_id:'ajdSDri1c-U' },
-      { id:'v2', baslik:'Kuru Fasulye Tarifi', video_id:'7rORG0W31aE' },
+      { id:'v1', baslik:'Menemen Tarifi', baslik_en:'Menemen Recipe', video_id:'ajdSDri1c-U' },
+      { id:'v2', baslik:'Kuru Fasulye Tarifi', baslik_en:'Turkish Bean Stew Recipe', video_id:'7rORG0W31aE' },
     ];
 
     function videoCard(v) {
       return `<div class="video-card" id="vc-${v.id}">
         <div class="video-embed">
           <iframe src="https://www.youtube.com/embed/${v.video_id}" loading="lazy"
-            allowfullscreen title="${v.baslik}"></iframe>
+            allowfullscreen title="${L(v,'baslik')}"></iframe>
         </div>
-        <div class="video-info"><h3>${v.baslik}</h3></div>
+        <div class="video-info"><h3>${L(v,'baslik')}</h3></div>
       </div>`;
     }
 
+    let videos = [];
     async function loadVideos() {
-      const grid = document.getElementById('videosGrid');
       try {
         const { data, error } = await supabaseClient.from('videolu_tarifler').select('*').order('created_at',{ascending:false});
-        grid.innerHTML = (error || !data?.length) ? DEMO_VIDEOS.map(videoCard).join('') : data.map(videoCard).join('');
-      } catch { grid.innerHTML = DEMO_VIDEOS.map(videoCard).join(''); }
+        videos = (error || !data?.length) ? DEMO_VIDEOS : data;
+      } catch { videos = DEMO_VIDEOS; }
+      document.getElementById('videosGrid').innerHTML = videos.map(videoCard).join('');
     }
 
     document.addEventListener('DOMContentLoaded', loadVideos);
+    // Başlıkları güncelle; iframe'leri yeniden yüklememek için sadece metin değişir
+    document.addEventListener('langchange', () => videos.forEach(v => {
+      const h = document.querySelector(`#vc-${v.id} h3`); if (h) h.textContent = L(v,'baslik');
+    }));
   </script>
 </body>
 </html>

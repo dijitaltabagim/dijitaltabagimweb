@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VKİ Hesaplama — Dijital Tabağım</title>
+  <title data-tr="VKİ Hesaplama — Dijital Tabağım" data-en="BMI Calculator — Dijital Tabağım">VKİ Hesaplama — Dijital Tabağım</title>
   <link rel="icon" type="image/png" href="images/logo-outline.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -101,39 +101,44 @@
     </div>
   </section>
 
-  <footer class="footer"><div class="container"><div class="footer-bottom"><p>© 2025 Dijital Tabağım</p></div></div></footer>
+  <footer class="footer"><div class="container"><div class="footer-bottom"><p data-tr="© 2025 Dijital Tabağım. Tüm hakları saklıdır." data-en="© 2025 Dijital Tabağım. All rights reserved.">© 2025 Dijital Tabağım. Tüm hakları saklıdır.</p></div></div></footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js"></script>
   <script>
+    let lastVki = null;
+
+    function vkiInfo(v) {
+      if (v<18.5) return { tr:'Zayıf',        en:'Underweight', emoji:'🟡', cls:'underweight', sub:t('Kilo almanız gerekebilir.','You may need to gain weight.') };
+      if (v<25)   return { tr:'Normal',       en:'Normal',      emoji:'🟢', cls:'normal',      sub:t('Sağlıklı kilodasınız!','You have a healthy weight!') };
+      if (v<30)   return { tr:'Fazla Kilolu', en:'Overweight',  emoji:'🟠', cls:'overweight',  sub:t('Dengeli beslenmeyi düşünün.','Consider a balanced diet.') };
+      return        { tr:'Obez',         en:'Obese',       emoji:'🔴', cls:'obese',       sub:t('Bir uzmanla görüşmenizi öneririz.','Please consult a specialist.') };
+    }
+
+    function showResult() {
+      const i = vkiInfo(lastVki);
+      document.getElementById('vkiVal').textContent = lastVki.toFixed(2);
+      document.getElementById('vkiLabel').textContent = i.emoji + ' ' + t(i.tr, i.en);
+      document.getElementById('vkiSub').textContent = i.sub;
+      document.getElementById('vkiCard').className = 'vki-result-box ' + i.cls;
+      document.getElementById('resultBox').style.display = 'block';
+    }
+
     async function calculate() {
       const boy = +document.getElementById('boy').value;
       const kilo = +document.getElementById('kilo').value;
-      if (!boy || !kilo || boy<=0) { showToast('Lütfen geçerli değerler girin.', 'error'); return; }
+      if (!boy || !kilo || boy<=0) { showToast(t('Lütfen geçerli değerler girin.','Please enter valid values.'), 'error'); return; }
 
-      const vki = kilo / ((boy/100)**2);
-      const lang = currentLang;
+      lastVki = kilo / ((boy/100)**2);
+      showResult();
 
-      let label, emoji, cls, sub;
-      if (vki<18.5)      { label=lang==='en'?'Underweight':'Zayıf';       emoji='🟡'; cls='underweight'; sub=lang==='en'?'You may need to gain weight.':'Kilo almanız gerekebilir.'; }
-      else if (vki<25)   { label=lang==='en'?'Normal':'Normal';           emoji='🟢'; cls='normal';      sub=lang==='en'?'You have a healthy weight!':'Sağlıklı kilodayorsunuz!'; }
-      else if (vki<30)   { label=lang==='en'?'Overweight':'Fazla Kilolu'; emoji='🟠'; cls='overweight';  sub=lang==='en'?'Consider a balanced diet.':'Dengeli beslenmeyi düşünün.'; }
-      else               { label=lang==='en'?'Obese':'Obez';              emoji='🔴'; cls='obese';       sub=lang==='en'?'Please consult a specialist.':'Bir uzmanla görüşmenizi öneririz.'; }
-
-      document.getElementById('vkiVal').textContent = vki.toFixed(2);
-      document.getElementById('vkiLabel').textContent = emoji + ' ' + label;
-      document.getElementById('vkiSub').textContent = sub;
-      const card = document.getElementById('vkiCard');
-      card.className = 'vki-result-box ' + cls;
-      document.getElementById('resultBox').style.display = 'block';
-
-      // Save to Supabase
+      // Save to Supabase (durum her zaman Türkçe kaydedilir; ekranda çevrilir)
       try {
         await supabaseClient.from('vki_kayitlari').insert({
           boy, kilo,
-          vki: parseFloat(vki.toFixed(2)),
-          durum: label
+          vki: parseFloat(lastVki.toFixed(2)),
+          durum: vkiInfo(lastVki).tr
         });
         loadHistory();
       } catch(_) {}
@@ -143,20 +148,18 @@
       const box = document.getElementById('historyBox');
       try {
         const { data, error } = await supabaseClient.from('vki_kayitlari').select('*').order('created_at',{ascending:false}).limit(5);
-        if (error || !data?.length) { box.innerHTML='<p style="font-size:.85rem;color:var(--text-muted)" data-tr="Henüz kayıt yok." data-en="No records yet.">Henüz kayıt yok.</p>'; return; }
+        if (error || !data?.length) { box.innerHTML=`<p style="font-size:.85rem;color:var(--text-muted)">${t('Henüz kayıt yok.','No records yet.')}</p>`; return; }
+        const badge = { underweight:'badge-under', normal:'badge-normal', overweight:'badge-over', obese:'badge-obese' };
         const rows = data.map(r=>{
-          const d = new Date(r.created_at).toLocaleDateString('tr-TR');
-          let bc = 'badge-normal';
-          if(r.durum?.includes('Zayıf')||r.durum==='Underweight') bc='badge-under';
-          else if(r.durum?.includes('Fazla')||r.durum==='Overweight') bc='badge-over';
-          else if(r.durum==='Obez'||r.durum==='Obese') bc='badge-obese';
-          return `<tr><td>${r.boy} cm / ${r.kilo} kg</td><td>${r.vki}</td><td><span class="${bc}">${r.durum}</span></td><td style="color:var(--text-muted);font-size:.8rem">${d}</td></tr>`;
+          const i = vkiInfo(+r.vki); // durum metni eski kayıtlarda TR/EN karışık olabilir; değerden hesapla
+          return `<tr><td>${r.boy} cm / ${r.kilo} kg</td><td>${r.vki}</td><td><span class="${badge[i.cls]}">${t(i.tr,i.en)}</span></td><td style="color:var(--text-muted);font-size:.8rem">${fmtDate(r.created_at)}</td></tr>`;
         }).join('');
-        box.innerHTML=`<table class="history-table"><thead><tr><th>Boy/Kilo</th><th>VKİ</th><th>Durum</th><th>Tarih</th></tr></thead><tbody>${rows}</tbody></table>`;
+        box.innerHTML=`<table class="history-table"><thead><tr><th>${t('Boy/Kilo','Height/Weight')}</th><th>${t('VKİ','BMI')}</th><th>${t('Durum','Status')}</th><th>${t('Tarih','Date')}</th></tr></thead><tbody>${rows}</tbody></table>`;
       } catch { box.innerHTML=''; }
     }
 
     document.addEventListener('DOMContentLoaded', loadHistory);
+    document.addEventListener('langchange', () => { loadHistory(); if (lastVki) showResult(); });
     document.addEventListener('keydown', e => { if(e.key==='Enter') calculate(); });
   </script>
 </body>
