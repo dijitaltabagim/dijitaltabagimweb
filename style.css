@@ -43,9 +43,9 @@ ul { list-style: none; }
 .nav-container { max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 100%; display: flex; align-items: center; gap: 32px; }
 .nav-logo { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .logo-icon { font-size: 1.6rem; }
-.nav-logo-img  { width: 36px; height: 36px; object-fit: contain; border-radius: 8px; }
+.nav-logo-img  { width: 44px; height: 44px; object-fit: contain; }
 .hero-logo-img { width: 220px; height: 220px; object-fit: contain; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: .18; }
-.footer-logo-img { width: 140px; object-fit: contain; margin-bottom: 12px; }
+.footer-logo-img { width: 140px; object-fit: contain; margin-bottom: 12px; filter: invert(1); } /* siyah logo koyu footer üzerinde beyaz */
 .nav-links { display: flex; gap: 4px; flex: 1; }
 .nav-links a {
   padding: 8px 14px; border-radius: 8px; font-size: .95rem; font-weight: 500; color: var(--text-muted);
@@ -322,7 +322,7 @@ section { padding: 96px 0; }
 .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #f0faf1, var(--white)); padding-top: var(--nav-h); }
 .auth-card { background: var(--white); border-radius: var(--radius); padding: 48px 40px; box-shadow: 0 16px 60px rgba(0,0,0,.1); width: 100%; max-width: 440px; }
 .auth-logo { text-align: center; margin-bottom: 32px; }
-.auth-logo .logo-big { font-size: 3.5rem; }
+.auth-logo .logo-big-img { width: 110px; height: 110px; object-fit: contain; }
 .auth-logo h2 { font-size: 1.5rem; font-weight: 800; color: var(--text); margin: 8px 0 4px; }
 .auth-logo p { font-size: .9rem; color: var(--text-muted); }
 .auth-tabs { display: flex; background: var(--bg); border-radius: var(--radius-sm); padding: 4px; margin-bottom: 28px; }
